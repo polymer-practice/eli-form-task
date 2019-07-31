@@ -3,34 +3,102 @@
 <dom-module id="eli-form-task">
   <template>
     <style>
-      :host {
-        display: block;
-      }
+     :host {
+       --font-size-task: var(--font-size, 15px);
+       --primary-task-color: var(--primary-color, red);
+       --secondary-task-color: var(--secondary-color, #fff);
+       display: block;
+     }
+     .task-form {
+       display: flex;
+       flex-direction: column;
+       justify-content: flex-start;
+       @apply --task-form;
+     }
+
+     .task-label{
+       font-size: var(--font-size-task);
+       @apply --task-label;
+     }
+     .task-input{
+       font-size: var(--font-size-task);
+       border: 1px solid black;
+       height: 35px;
+       width: 100%;
+       margin: 5px 0px;
+       border-radius: 4px;
+       font-size: var(--font-size-task);
+       @apply --task-input;
+     }
+
+     .task-input:focus{
+       outline: none;
+       border: 3px solid var(--primary-task-color);
+     }
+
+     .task-button{
+       margin-left: auto;
+       font-size: var(--font-size-task);
+       max-width: 75px;
+       height: 38px;
+       border-radius: 4px;
+       background-color: var(--primary-task-color);
+       color: var(--secondary-task-color);
+       border: 1px solid #ccc;
+       cursor: pointer;
+       @apply --task-button;
+     }
+
+     @media (min-width: 600px) {
+       .task-form {
+         flex-direction: row;
+         justify-content: space-between;
+         align-items: center;
+       }
+     }
     </style>
-    <h2>Hello [[prop1]]!</h2>
+    <form class="task-form" on-submit="submitForm">
+      <label class="task-label">[[textLabel]]</label>
+      <input value="{{taskText::input}}" type="text" class="task-input"></input>
+      <button type="submit" class="task-button">Save task</button>
+    </form>
   </template>
-
   <script>
-    /**
-     * `eli-form-task`
-     * 
-     *
-     * @customElement
-     * @polymer
-     * @demo demo/index.html
-     */
-    class EliFormTask extends Polymer.Element {
-      static get is() { return 'eli-form-task'; }
-      static get properties() {
-        return {
-          prop1: {
-            type: String,
-            value: 'eli-form-task'
-          }
-        };
-      }
-    }
+   /**
+    * `eli-form-task`
+    *
+    *
+    * @customElement
+    * @polymer
+    * @demo demo/index.html
+    */
+   class EliFormTask extends Polymer.Element {
+     static get is() { return 'eli-form-task'; }
+     static get properties() {
+       return {
+         textLabel: {
+           type: String,
+           value: 'Add new task'
+         }
+       };
+     }
+     submitForm(event){
+       event.preventDefault();
+       if(!this.taskText) return;
+       const addTaskEvent = new CustomEvent(
+         'add-task',
+         {
+           bubbles: true,
+           composed: true,
+           detail:{
+             taskText: this.taskText
+           }
+         });
+       this.dispatchEvent(addTaskEvent);
+       console.log('form submitted');
+     }
+   }
 
-    window.customElements.define(EliFormTask.is, EliFormTask);
+   window.customElements.define(EliFormTask.is, EliFormTask);
   </script>
 </dom-module>

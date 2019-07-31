@@ -14,6 +14,11 @@
 
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
+       eli-form-task{
+         --task-button:{
+           border:1px solid grey;
+         };
+       }
       </style>
     </custom-style>
   </head>
@@ -22,7 +27,13 @@
       <h3>Basic eli-form-task demo</h3>
       <demo-snippet>
         <template>
-          <eli-form-task></eli-form-task>
+          <eli-form-task id="form" text-label="Añade una nueva tarea:"></eli-form-task>
+          <script>
+           const taskForm = document.getElementById('form');
+           taskForm.addEventListener('add-task', (event) => {
+             console.log(event.detail.taskText);
+           });
+          </script>
         </template>
       </demo-snippet>
     </div>
